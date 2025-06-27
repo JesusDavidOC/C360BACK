@@ -1,0 +1,5 @@
+CREATE DATABASE scheduling;
+
+CREATE DATABASE capacity;
+
+CREATE DATABASE reports;

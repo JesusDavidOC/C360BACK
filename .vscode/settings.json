@@ -1,0 +1,14 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "cSpell.words": [
+    "dtos",
+    "fieldname",
+    "Premanufactured",
+    "quickpallete",
+    "SENDGRID",
+    "timestamptz",
+    "typeorm"
+  ]
+}
