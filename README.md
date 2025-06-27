@@ -35,27 +35,34 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
-$ npm run start
+# reports-ms
+$ npm run "start:reports-ms
 
-# watch mode
-$ npm run start:dev
+# capacity-ms
+$ npm run "start:capacity-ms
 
-# production mode
-$ npm run start:prod
+# schedule-ms
+$ npm run "start:schedule-ms
 ```
 
-## Test
+## Migrations
 
 ```bash
-# unit tests
-$ npm run test
+# For generate all migrations
+$ npm run migrations:generate:all
 
-# e2e tests
-$ npm run test:e2e
+# For each microservice
+$ npm run migrations:generate:ms_name  
+# ej: 
+$ npm run migrations:generate:capacity
 
-# test coverage
-$ npm run test:cov
+# For run all migrations 
+$ npm run migrations:run:all
+
+# For each microservice
+$ npm run migrations:run:ms_name  
+# ej: 
+$ npm run migrations:run:capacity
 ```
 
 ## Support
