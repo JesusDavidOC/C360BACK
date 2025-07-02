@@ -1,17 +1,64 @@
+// .vscode/launch.json
 {
-    // Use IntelliSense para saber los atributos posibles.
-    // Mantenga el puntero para ver las descripciones de los existentes atributos.
-    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-          "name": "Attach",
-          "port": 9229,
-          "request": "attach",
-          "skipFiles": [
-            "<node_internals>/**"
-          ],
-          "type": "node"
-        }
-    ]
-  }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Scheduling-MS",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "ts-node",
+        "-r",
+        "tsconfig-paths/register",
+        "${workspaceFolder}/apps/scheduling-ms/src/main.ts"
+      ],
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+      "console": "integratedTerminal",
+      "sourceMaps": true
+    },
+    {
+      "name": "Debug Capacity-MS",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "ts-node",
+        "-r",
+        "tsconfig-paths/register",
+        "${workspaceFolder}/apps/capacity-ms/src/main.ts"
+      ],
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+      "console": "integratedTerminal",
+      "sourceMaps": true
+    },
+    {
+      "name": "Debug API-Gateway",
+      "type": "node",
+      "request": "launch",
+
+      // Arranca con npx ts-node, pero en la carpeta del gateway
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "ts-node",
+        "-r",
+        "tsconfig-paths/register",
+        "src/main.ts" // ahora relativo a cwd
+      ],
+
+      "cwd": "${workspaceFolder}/apps/gateway-api",
+
+      "console": "integratedTerminal",
+      "protocol": "inspector",
+      "sourceMaps": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug All Microservices",
+      "configurations": ["Debug Scheduling-MS", "Debug Capacity-MS", "Debug API-Gateway"]
+    }
+  ]
+}

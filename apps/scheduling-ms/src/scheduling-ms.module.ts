@@ -1,6 +1,9 @@
+import { CAPACITY_NATS_SERIVE_NAME } from '@c360/shared-kernel/consts/capacity-nats-service-name.const';
+import { SCHEDULING_NATS_SERIVE_NAME } from '@c360/shared-kernel/consts/scheduling-nats-service-name.const';
+import { messageBrokerOptionsFactory } from '@c360/shared-kernel/factories/message-broker/options.factory';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import config from './config/config';
@@ -11,9 +14,8 @@ import { GetAppointmentsByCellphoneUseCase } from './core/application/use-cases/
 import { ReportRequestUseCase } from './core/application/use-cases/report-request.use-case';
 import { Appointment } from './core/domain/entities/appointment/appointment.typeorm.entity';
 import { PublisherAdapter } from './infrastructure/adapters/message-broker/publisher.adapter';
+import { SubscriberAdapter } from './infrastructure/adapters/message-broker/subscriber.adapter';
 import { AppointmentsRepository } from './infrastructure/adapters/typeorm/appointments.typeorm.repository';
-import { AppointmentsController } from './infrastructure/controllers/appointments.controller';
-import { ReportsController } from './infrastructure/controllers/reports.controller';
 
 @Module({
   imports: [
@@ -27,17 +29,27 @@ import { ReportsController } from './infrastructure/controllers/reports.controll
     }),
     ClientsModule.register([
       {
-        name: 'APPOINTMENT_SERVICE',
+        name: SCHEDULING_NATS_SERIVE_NAME,
         transport: Transport.NATS,
         options,
       },
     ]),
+    ClientsModule.registerAsync([
+      {
+        name: CAPACITY_NATS_SERIVE_NAME,
+        imports: [ConfigModule],
+        useFactory: (cs: ConfigService) =>
+          messageBrokerOptionsFactory(cs, CAPACITY_NATS_SERIVE_NAME),
+        inject: [ConfigService],
+      },
+    ]),
   ],
-  controllers: [AppointmentsController, ReportsController],
+  controllers: [SubscriberAdapter],
   providers: [
     ReportRequestUseCase,
     GetAppointmentsByCellphoneUseCase,
     CreateAppointmentUseCase,
+    SubscriberAdapter,
     {
       provide: 'AppointmentRepositoryPort',
       useClass: AppointmentsRepository,

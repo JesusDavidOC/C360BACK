@@ -1,8 +1,8 @@
+import { CreateAppointmentDto } from '@c360/shared-kernel/dtos/create-appointment.dto';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateAppointmentUseCase } from '../../core/application/use-cases/create-appointment.use-case';
 import { GetAppointmentsByCellphoneUseCase } from '../../core/application/use-cases/get-appointments-by-cellphone.use-case';
 import { AppointmentInterface } from '../../core/domain/entities/appointment/interfaces/appointment.interface';
-import { CreateAppointmentDto } from '../dtos/create-appointment.dto';
 
 @Controller('customers')
 export class AppointmentsController {

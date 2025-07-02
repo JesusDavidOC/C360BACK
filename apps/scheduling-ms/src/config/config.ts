@@ -24,5 +24,6 @@ export default registerAs('config', () => ({
   },
   nats: {
     url: process.env.NATS_URL || 'nats://localhost:4222',
+    queue: process.env.NATS_QUEUE || 'appointments',
   },
 }));

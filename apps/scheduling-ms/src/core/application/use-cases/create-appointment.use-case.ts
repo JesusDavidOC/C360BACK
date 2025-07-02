@@ -1,3 +1,4 @@
+import { CAPACITY_NATS_SERIVE_NAME } from '@c360/shared-kernel/consts/capacity-nats-service-name.const';
 import { Injectable } from '@c360/shared-kernel/dependency-manager/decorators/injectable.decorator';
 import { AppointmentCreatedEvent } from '@c360/shared-kernel/events/appointment-created.event';
 import { VALIDATE_CAPACITY_SUBJECT } from '@c360/shared-kernel/events/consts/validate-capacity-subject.const';
@@ -20,18 +21,18 @@ export class CreateAppointmentUseCase {
     @Inject('EventPublisherPort')
     private readonly eventPublisher: EventPublisherPort,
 
-    @Inject('APPOINTMENT_SERVICE')
+    @Inject(CAPACITY_NATS_SERIVE_NAME)
     private readonly capacityClient: ClientProxy,
   ) {}
 
   async execute(payload: CreateAppointmentCommand): Promise<AppointmentInterface> {
     const appointment = new AppointmentEntity(payload.date, payload.cellphone, payload.serviceType);
 
-    const response$ = this.capacityClient.send<{ available: boolean }, ValidateCapacityEvent>(
+    const eventResponse = this.capacityClient.send<{ available: boolean }, ValidateCapacityEvent>(
       VALIDATE_CAPACITY_SUBJECT,
       new ValidateCapacityEvent(appointment.date, appointment.serviceType),
     );
-    const { available } = await firstValueFrom(response$);
+    const { available } = await firstValueFrom(eventResponse);
 
     if (!available) {
       throw new TechnicianNotAvailableException(payload.date);
@@ -43,6 +44,7 @@ export class CreateAppointmentUseCase {
       appointment.cellphone,
       appointment.date,
       appointment.serviceType,
+      appointment.status,
       appointment.createdAt,
     );
 

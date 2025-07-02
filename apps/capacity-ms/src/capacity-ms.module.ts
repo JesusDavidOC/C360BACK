@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { CAPACITY_NATS_SERIVE_NAME } from '@c360/shared-kernel/consts/capacity-nats-service-name.const';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -26,7 +27,7 @@ import { CapacityController } from './infrastructure/controllers/capacity.contro
     }),
     ClientsModule.register([
       {
-        name: 'APPOINTMENT_SERVICE',
+        name: CAPACITY_NATS_SERIVE_NAME,
         transport: Transport.NATS,
         options,
       },
