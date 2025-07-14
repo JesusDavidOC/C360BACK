@@ -9,6 +9,6 @@ async function bootstrap() {
     options,
   });
   await app.listen();
-  console.log('Scheduling-MS listening via NATS');
+  console.log('Scheduling-MS listening calls');
 }
 bootstrap();

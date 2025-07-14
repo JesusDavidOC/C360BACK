@@ -9,5 +9,6 @@ async function bootstrap() {
     options,
   });
   await app.listen();
+  console.log('Capacity Microservice is running');
 }
 bootstrap();

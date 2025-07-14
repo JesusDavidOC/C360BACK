@@ -12,9 +12,9 @@ import { GetAvailableTechnicianUseCase } from './core/application/use-cases/get-
 import { ValidateCapacityUseCase } from './core/application/use-cases/validate-capacity.use-case';
 import { AppointmentCapacity } from './core/domain/entities/appointment/appointment.typeorm.entity';
 import { Technician } from './core/domain/entities/technician/technician.typeorm.entity';
+import { PublisherAdapter } from './infrastructure/adapters/message-broker/publisher.adapter';
 import { SubscriberAdapter } from './infrastructure/adapters/message-broker/subscriber.adapter';
 import { CapacityRepository } from './infrastructure/adapters/typeorm/capacity.typeorm.repository';
-import { CapacityController } from './infrastructure/controllers/capacity.controller';
 
 @Module({
   imports: [
@@ -33,16 +33,12 @@ import { CapacityController } from './infrastructure/controllers/capacity.contro
       },
     ]),
   ],
-  controllers: [CapacityController],
+  controllers: [SubscriberAdapter],
   providers: [
     SubscriberAdapter,
     CreateAppointmentUseCase,
     GetAvailableTechnicianUseCase,
     ValidateCapacityUseCase,
-    {
-      provide: 'EventSubscriberPort',
-      useClass: SubscriberAdapter,
-    },
     {
       provide: 'CapacityRepositoryPort',
       useClass: CapacityRepository,
@@ -50,6 +46,10 @@ import { CapacityController } from './infrastructure/controllers/capacity.contro
     {
       provide: 'ValidateCapacityPort',
       useClass: CapacityRepository,
+    },
+    {
+      provide: 'EventPublisherPort',
+      useClass: PublisherAdapter,
     },
   ],
   exports: [],

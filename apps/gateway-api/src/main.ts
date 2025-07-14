@@ -5,5 +5,6 @@ import { GatewayApiModule } from './gateway-api.module';
 async function bootstrap() {
   const app = await NestFactory.create(GatewayApiModule);
   await app.listen(config().projectPort ?? 3000);
+  console.log(`Gateway API is running on: http://localhost:${config().projectPort ?? 3000}`);
 }
 bootstrap();

@@ -3,8 +3,8 @@ import { TECHNICIAN_ASSIGNED_SUBJECT } from './consts/technician-assigned-subjec
 
 export class TechnicianAssignedEvent implements ApplicationEvent {
   constructor(
-    public readonly technician: { id: number },
-    public readonly appointment: { id: number },
+    public readonly technician: { id: string },
+    public readonly appointment: { id: string },
   ) {}
 
   public getSubject(): string {

@@ -1,8 +1,14 @@
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { options } from './config/message-broker/options';
 import { ReportsMsModule } from './reports-ms.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ReportsMsModule);
-  await app.listen(process.env.port ?? 3000);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(ReportsMsModule, {
+    transport: Transport.NATS,
+    options,
+  });
+  await app.listen();
+  console.log('Reports Microservice is running');
 }
 bootstrap();

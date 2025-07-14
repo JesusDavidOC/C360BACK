@@ -48,7 +48,7 @@ export class CreateAppointmentUseCase {
       appointment.createdAt,
     );
 
-    await this.eventPublisher.publishAppointmentCreated(event);
+    this.eventPublisher.publishAppointmentCreated(event);
 
     return appointment.toPrimitive();
   }

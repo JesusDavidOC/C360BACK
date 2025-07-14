@@ -10,7 +10,7 @@ export class Report {
   cellphone: string;
 
   @Column({ name: 'status', type: 'enum', enum: ReportStatus })
-  status: ReportStatus[];
+  status: ReportStatus;
 
   @Column({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

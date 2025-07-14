@@ -4,7 +4,7 @@ import { CreateAppointmentUseCase } from '../../core/application/use-cases/creat
 import { GetAppointmentsByCellphoneUseCase } from '../../core/application/use-cases/get-appointments-by-cellphone.use-case';
 import { AppointmentInterface } from '../../core/domain/entities/appointment/interfaces/appointment.interface';
 
-@Controller('customers')
+@Controller('')
 export class AppointmentsController {
   constructor(
     private readonly createAppointmentUseCase: CreateAppointmentUseCase,

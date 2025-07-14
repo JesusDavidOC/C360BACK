@@ -4,9 +4,10 @@ import { AppointmentCreatedEvent } from '@c360/shared-kernel/events/appointment-
 import { CREATE_APPOINTMENT_SUBJECT } from '@c360/shared-kernel/events/consts/create-appointment-subject.const';
 import { Controller, Inject, OnModuleInit } from '@nestjs/common';
 import { ClientProxy, EventPattern } from '@nestjs/microservices';
-import { EventSubscriberPort } from 'apps/capacity-ms/src/core/domain/ports/outbound/event-subscriber.port';
+import { AppointmentInterface } from 'apps/scheduling-ms/src/core/domain/entities/appointment/interfaces/appointment.interface';
 import { CreateAppointmentCommand } from '../../../core/application/commands/create-appointment.command';
 import { CreateAppointmentUseCase } from '../../../core/application/use-cases/create-appointment.use-case';
+import { EventSubscriberPort } from '../../../core/domain/ports/outbound/event-subscriber.port';
 
 @Injectable()
 @Controller()
@@ -23,12 +24,12 @@ export class SubscriberAdapter implements EventSubscriberPort, OnModuleInit {
   }
 
   @EventPattern(CREATE_APPOINTMENT_SUBJECT)
-  async handleAppointmentCreated(data: AppointmentCreatedEvent) {
+  async handleCreateAppointment(data: AppointmentCreatedEvent): Promise<AppointmentInterface> {
     const event: CreateAppointmentCommand = {
       date: data.date,
       serviceType: data.serviceType,
       cellphone: data.cellphone,
     };
-    await this.createAppointmentUseCase.execute(event);
+    return await this.createAppointmentUseCase.execute(event);
   }
 }

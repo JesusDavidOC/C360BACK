@@ -5,6 +5,7 @@ import { AppointmentCapacityInterface } from './interfaces/appointment.interface
 
 export class AppointmentCapacityEntity extends AppointmentCapacity {
   public constructor(
+    public readonly id: string,
     public readonly date: Date,
     public readonly serviceType: ServiceType,
     public readonly technician: Technician,

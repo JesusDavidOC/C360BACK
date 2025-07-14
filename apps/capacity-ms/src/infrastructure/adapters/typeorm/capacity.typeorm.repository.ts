@@ -17,32 +17,19 @@ export class CapacityRepository implements ValidateCapacityPort, CapacityReposit
   ) {}
 
   async isAvailable(payload: { date: Date; serviceType: ServiceType }): Promise<boolean> {
-    const technicians = await this.getAvailableTechnicians(payload);
-    return technicians.length > 0;
-  }
-
-  async getAvailableTechnicians(payload: {
-    date: Date;
-    serviceType: ServiceType;
-  }): Promise<Technician[]> {
-    return await this.techniciansRepository
-      .createQueryBuilder('technician')
-      .leftJoinAndSelect('technician.appointments', 'appointment', 'appointment.date = :date', {
-        date: payload.date,
-      })
-      .where(':serviceType = ANY(technician.services)', { serviceType: payload.serviceType })
-      .groupBy('technician.id')
-      .having('COUNT(appointment.id) < technician.maxAppointmentsPerDay')
-      .getMany();
+    const technician = await this.getAvailableTechnician(payload);
+    return technician !== null;
   }
 
   async getAvailableTechnician(payload: GetAvailableTechnicianCommand): Promise<Technician> {
-    return await this.techniciansRepository
+    return this.techniciansRepository
       .createQueryBuilder('technician')
-      .leftJoinAndSelect('technician.appointments', 'appointment', 'appointment.date = :date', {
+      .leftJoin('technician.appointments', 'appointment', 'appointment.date = :date', {
         date: payload.date,
       })
-      .where(':serviceType = ANY(technician.services)', { serviceType: payload.serviceType })
+      .where(':serviceType = ANY(technician.services)', {
+        serviceType: payload.serviceType,
+      })
       .groupBy('technician.id')
       .having('COUNT(appointment.id) < technician.maxAppointmentsPerDay')
       .getOne();
